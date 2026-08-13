@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- O app so fala com a API por HTTP; sem isso o release nao tem rede
+         (os manifests de debug/profile ja declaram, mas so valem naqueles builds). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="romeu_lanches_mobile"
         android:name="${applicationName}"

@@ -4,4 +4,10 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Do Android 9 (API 28) em diante o trafego em claro e bloqueado por
+         padrao. O backend de desenvolvimento roda em http://<ip-da-maquina>:8080,
+         entao o debug precisa liberar. Fica so no debug — o release continua
+         exigindo HTTPS. -->
+    <application android:usesCleartextTraffic="true"/>
 </manifest>

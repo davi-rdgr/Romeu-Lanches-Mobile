@@ -1,19 +1,16 @@
-import 'package:flutter/foundation.dart';
-
-/// Endereco do backend. Sobrescreva com:
+/// Endereco do backend. O default e producao; para apontar para o Spring local
+/// sobrescreva no build/run:
 /// `flutter run --dart-define=API_BASE_URL=http://192.168.0.10:8080`
-///
-/// O default muda por plataforma porque `localhost` dentro do emulador Android
-/// aponta para o proprio emulador, nao para a maquina que roda o Spring.
+/// (no emulador Android use `http://10.0.2.2:8080` — la `localhost` e o proprio
+/// emulador, nao a maquina que roda o Spring).
 class AppConfig {
   static const _fromEnvironment = String.fromEnvironment('API_BASE_URL');
 
+  static const productionBaseUrl = 'https://romeu-backend-2ms6.onrender.com';
+
   static String get baseUrl {
     if (_fromEnvironment.isNotEmpty) return _fromEnvironment;
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      return 'http://10.0.2.2:8080';
-    }
-    return 'http://localhost:8080';
+    return productionBaseUrl;
   }
 
   /// Intervalo do polling de acompanhamento do pedido.
