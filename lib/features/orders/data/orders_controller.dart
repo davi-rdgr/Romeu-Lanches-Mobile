@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:romeu_lanches_mobile/core/config/app_config.dart';
 import 'package:romeu_lanches_mobile/core/network/api_exception.dart';
+import 'package:romeu_lanches_mobile/core/network/realtime_client.dart';
 import 'package:romeu_lanches_mobile/features/cart/data/cart_item.dart';
 import 'package:romeu_lanches_mobile/features/orders/data/order.dart';
 import 'package:romeu_lanches_mobile/features/orders/data/order_enums.dart';
@@ -85,6 +86,29 @@ class OrdersController {
 
   Future<PixPayment> requestPixPayment(String orderId) =>
       _repository.requestPixPayment(orderId);
+
+  /// Evento do canal `/topic/cliente/{id}`. O `dado` e o `PedidoResponse`
+  /// completo, entao da para atualizar o cache e a listagem sem ir na API.
+  ///
+  /// Serve para `PEDIDO_CRIADO` e `STATUS_ATUALIZADO` sem distincao: os dois
+  /// carregam o pedido inteiro, e gravar o estado mais novo resolve os dois
+  /// casos (inserir na listagem ou trocar o status).
+  void applyRealtimeEvent(RealtimeEvent event) {
+    final Order order;
+    try {
+      order = Order.fromJson(event.data);
+    } catch (_) {
+      // Payload inesperado (campo novo obrigatorio, formato mudado): o polling
+      // ainda traz o estado certo, entao nao vale derrubar nada aqui.
+      return;
+    }
+
+    _store(order);
+    _patchSummary(order);
+
+    // O pedido acompanhado terminou: nao ha mais o que esperar.
+    if (_trackedId == order.id && !order.isActive) stopTracking();
+  }
 
   /// Polling do acompanhamento. Enquanto o WebSocket nao estiver ligado, e o
   /// refetch que move a tela — e mesmo depois ele fica como fallback, porque o

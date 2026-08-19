@@ -1,7 +1,7 @@
 name: romeu_lanches_mobile
 description: "A new Flutter project."
 
-publish_to: 'none' 
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -19,6 +19,11 @@ dependencies:
   intl: ^0.20.3
   http: ^1.2.2
   cached_network_image: ^3.4.1
+  stomp_dart_client: ^3.0.1
+  # dart run flutter_launcher_icons
+  flutter_launcher_icons: ^0.14.4
+  # dart run flutter_native_splash:create
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -28,5 +33,18 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets: 
+  assets:
     - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/burguer.jpg"
+
+flutter_native_splash:
+  color: "#BF360C"
+  image: assets/images/burguer.jpg
+
+  android_12:
+    color: "#BF360C"
+    image: assets/images/burguer.jpg

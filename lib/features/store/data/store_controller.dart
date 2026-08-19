@@ -25,7 +25,7 @@ class StoreController {
   String estimatedTimeLabel(DeliveryMethod method) {
     final minutes = estimatedMinutes.value;
     if (minutes <= 0) return '-';
-    if (method == DeliveryMethod.pickup) return 'cerca de $minutes min';
+    if (method == DeliveryMethod.pickup) return 'Cerca de $minutes min';
     return '$minutes-${minutes + 15} min';
   }
 

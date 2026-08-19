@@ -110,7 +110,7 @@ class AccountPage extends StatelessWidget {
                         color: Color(0xFFE23725),
                       ),
                       title: Text(
-                        'Horario de funcionamento',
+                        'Horário de funcionamento',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -119,7 +119,7 @@ class AccountPage extends StatelessWidget {
                       ),
                       subtitle: Text(
                         // O horario e informativo: quem manda e o toggle da loja.
-                        'A loja pode abrir ou fechar fora desse horario.',
+                        'A loja pode abrir ou fechar fora desse horário.',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
@@ -151,13 +151,13 @@ class AccountPage extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               AccountAction(
-                title: 'Historico de pedidos',
+                title: 'Histórico de pedidos',
                 icon: Icons.receipt_long_outlined,
                 onTap: () => deps.scaffoldFullDependencies.scaffold.goTo(2),
               ),
               const SizedBox(height: 10),
               AccountAction(
-                title: 'Enderecos salvos',
+                title: 'Endereços salvos',
                 icon: Icons.location_on_outlined,
                 onTap: () async {
                   final loggedIn = await ensureLoggedIn(context);
@@ -191,7 +191,7 @@ class AccountPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Voce nao esta logado',
+          'Voce não está logado',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 16,
             fontWeight: FontWeight.w800,
@@ -200,7 +200,7 @@ class AccountPage extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Entrar e opcional para ver o cardapio — so precisa na hora de '
+          'Entrar e opcional para ver o cardápio — só precisa na hora de '
           'finalizar o pedido.',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 12,

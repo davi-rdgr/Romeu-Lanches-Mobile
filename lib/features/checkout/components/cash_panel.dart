@@ -36,7 +36,7 @@ class CashPanel extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Voce paga em dinheiro quando o pedido chegar.',
+            'Você paga em dinheiro quando o pedido chegar.',
             style: GoogleFonts.plusJakartaSans(
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -83,7 +83,7 @@ class CashPanel extends StatelessWidget {
           GestureDetector(
             onTap: onNoChangeNeeded,
             child: Text(
-              'Nao preciso de troco',
+              'Não preciso de troco',
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

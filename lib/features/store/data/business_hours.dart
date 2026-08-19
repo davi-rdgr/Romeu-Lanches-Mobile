@@ -33,11 +33,11 @@ class BusinessHours {
 
   static const _dayNames = [
     'Segunda',
-    'Terca',
+    'Terça',
     'Quarta',
     'Quinta',
     'Sexta',
-    'Sabado',
+    'Sábado',
     'Domingo',
   ];
 

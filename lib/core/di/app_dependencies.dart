@@ -7,6 +7,7 @@ import 'package:romeu_lanches_mobile/core/di/orders_full_dependencies.dart';
 import 'package:romeu_lanches_mobile/core/di/scaffold_full_dependencies.dart';
 import 'package:romeu_lanches_mobile/core/di/store_full_dependencies.dart';
 import 'package:romeu_lanches_mobile/core/network/api_client.dart';
+import 'package:romeu_lanches_mobile/core/network/realtime_client.dart';
 import 'package:romeu_lanches_mobile/features/auth/data/session_storage.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
@@ -14,6 +15,7 @@ late final AppDependencies deps;
 
 class AppDependencies {
   late final ApiClient api;
+  late final RealtimeClient realtime;
   late final AuthFullDependencies authFullDependencies;
   late final ScaffoldFullDependencies scaffoldFullDependencies;
   late final StoreFullDependencies storeFullDependencies;
@@ -42,6 +44,9 @@ class AppDependencies {
     );
     addressesFullDependencies = AddressesFullDependencies(api);
     ordersFullDependencies = OrdersFullDependencies(api);
+    realtime = RealtimeClient(
+      tokenProvider: () => authFullDependencies.auth.session.value?.token,
+    );
 
     effect(() {
       scaffoldFullDependencies.scaffold.setCartItemsCount(
@@ -61,6 +66,32 @@ class AppDependencies {
         ordersFullDependencies.orders.clear();
       }
     });
+
+    // O canal em tempo real segue a sessao: o topico e
+    // `/topic/cliente/{sub do JWT}` e o backend so deixa o proprio cliente
+    // assinar. Sem `clienteId` (token que nao decodificou) fica so o polling.
+    effect(() {
+      final clienteId = authFullDependencies.auth.clienteId.value;
+      if (clienteId == null) {
+        realtime.disconnect();
+      } else {
+        realtime.connect(
+          clienteId,
+          onEvent: ordersFullDependencies.orders.applyRealtimeEvent,
+        );
+      }
+    });
+  }
+
+  /// App voltou do background. O socket costuma morrer enquanto o processo esta
+  /// suspenso e os dados envelhecem: reconecta e revalida o que muda sozinho no
+  /// servidor (status dos pedidos e a loja estar aberta).
+  void handleAppResumed() {
+    realtime.reconnectIfNeeded();
+    storeFullDependencies.store.refreshIsOpen();
+    if (authFullDependencies.auth.isLoggedIn.value) {
+      ordersFullDependencies.orders.load();
+    }
   }
 
   static Future<AppDependencies> create({http.Client? httpClient}) async {

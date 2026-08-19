@@ -21,8 +21,8 @@ class OrderConfirmedPage extends StatelessWidget {
     final paymentLabel = switch (order.paymentMethod) {
       PaymentMethod.pix => 'Pix - pago',
       PaymentMethod.card => isDelivery
-          ? 'Cartao na entrega'
-          : 'Cartao na retirada',
+          ? 'Cartão na entrega'
+          : 'Cartão na retirada',
       PaymentMethod.cash => isDelivery
           ? 'Dinheiro na entrega'
           : 'Dinheiro na retirada',
@@ -98,7 +98,7 @@ class OrderConfirmedPage extends StatelessWidget {
                     PriceLine(label: 'Pagamento', value: paymentLabel),
                     if (order.address != null)
                       PriceLine(
-                        label: 'Endereco',
+                        label: 'Endereço',
                         value: order.address!.summary,
                       ),
                     const Divider(height: 20),
@@ -140,7 +140,7 @@ class OrderConfirmedPage extends StatelessWidget {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 child: Text(
-                  'Voltar ao inicio',
+                  'Voltar ao início',
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,

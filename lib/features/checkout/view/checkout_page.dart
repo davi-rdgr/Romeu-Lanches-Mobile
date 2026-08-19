@@ -233,7 +233,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               },
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
               child: Text(
-                address == null ? 'Cadastrar endereco' : 'Trocar endereco',
+                address == null ? 'Cadastrar endereço' : 'Trocar endereço',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -252,7 +252,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'RETIRAR NO BALCAO',
+          'RETIRAR NO BALCÃO',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 11,
             fontWeight: FontWeight.w700,
@@ -320,7 +320,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Observacao do pedido',
+          'Observação do pedido',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 15,
             fontWeight: FontWeight.w800,
@@ -407,7 +407,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             label: isDelivery ? 'Entrega' : 'Retirada',
             value: isDelivery
                 ? formatMoney(cart.deliveryFee.value)
-                : 'Gratis',
+                : 'Grátis',
           ),
           const Divider(height: 20),
           PriceLine(
@@ -416,14 +416,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
             strong: true,
           ),
           const SizedBox(height: 6),
-          Text(
+          /* Text(
             'O valor final e calculado pelo servidor ao enviar o pedido.',
             style: GoogleFonts.plusJakartaSans(
               fontSize: 11,
               fontWeight: FontWeight.w500,
               color: const Color(0XFF9A7E6A),
             ),
-          ),
+          ), */
         ],
       ),
     );

@@ -287,7 +287,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         const SizedBox(height: 4),
         Text(
-          'Ao confirmar, geramos o QR Code. Voce tem 30 minutos para pagar — '
+          'Ao confirmar, geramos o QR Code. Você tem 30 minutos para pagar — '
           'depois disso o pedido e cancelado automaticamente.',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 12,

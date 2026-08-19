@@ -121,7 +121,7 @@ class CartPage extends SignalWidget {
                               onTap: () =>
                                   cart.selectDeliveryMethod(DeliveryMethod.pickup),
                               title: Text(
-                                'Retirar no balcao',
+                                'Retirar no balcão',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
@@ -137,7 +137,7 @@ class CartPage extends SignalWidget {
                                 ),
                               ),
                               trailing: Text(
-                                'Gratis',
+                                'Grátis',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,

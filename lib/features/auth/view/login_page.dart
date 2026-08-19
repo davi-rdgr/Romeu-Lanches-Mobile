@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 6),
               Text(
-                'So o CPF e o telefone. Nao pedimos senha nem e-mail.',
+                'Só o CPF e o telefone. Não pedimos senha nem e-mail.',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 14),
               Text(
-                'Primeira vez? Se o CPF ainda nao estiver cadastrado, a gente '
+                'Primeira vez? Se o CPF ainda não estiver cadastrado, a gente '
                 'abre o cadastro para voce.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.plusJakartaSans(

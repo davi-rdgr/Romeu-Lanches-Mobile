@@ -13,8 +13,17 @@ class AppConfig {
     return productionBaseUrl;
   }
 
-  /// Intervalo do polling de acompanhamento do pedido.
+  /// Endpoint STOMP/SockJS, na mesma origem da API. O `StompConfig.sockJS`
+  /// converte o esquema (`http` -> `ws`, `https` -> `wss`) e completa o caminho
+  /// do transporte sozinho.
+  static String get websocketUrl => '$baseUrl/ws';
+
+  /// Intervalo do polling de acompanhamento do pedido. Continua valendo mesmo
+  /// com o WebSocket ligado: o envio dos eventos e best-effort.
   static const orderPollingInterval = Duration(seconds: 10);
+
+  /// Espera entre tentativas de reconexao do WebSocket.
+  static const realtimeReconnectDelay = Duration(seconds: 5);
 
   static const requestTimeout = Duration(seconds: 20);
 }

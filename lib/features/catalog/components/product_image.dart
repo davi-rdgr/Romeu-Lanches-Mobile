@@ -75,7 +75,7 @@ class ProductImage extends StatelessWidget {
   }
 
   Widget _fallback() => Image.asset(
-    'assets/images/burguer.webp',
+    'assets/images/burguer.jpg',
     fit: BoxFit.cover,
     width: double.infinity,
     height: double.infinity,

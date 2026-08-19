@@ -10,12 +10,17 @@ import 'package:romeu_lanches_mobile/features/checkout/components/pix_panel.dart
 import 'package:romeu_lanches_mobile/features/orders/data/order.dart';
 import 'package:romeu_lanches_mobile/features/orders/data/pix_payment.dart';
 import 'package:romeu_lanches_mobile/features/orders/view/order_confirmed_page.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 
 /// Cobranca PIX de um pedido recem-criado.
 ///
 /// O app nunca confirma o pagamento: a aprovacao chega no backend pelo webhook
 /// do Mercado Pago e o pedido sai de `AGUARDANDO_PAGAMENTO` para `NOVO`. Aqui
-/// so exibimos o QR e recarregamos o pedido ate ele mudar de estado.
+/// so exibimos o QR e esperamos.
+///
+/// A tela nao consulta o pedido direto: ela observa o cache do
+/// `OrdersController`, entao reage igual venha o `STATUS_ATUALIZADO` pelo
+/// WebSocket (o caminho normal, quase instantaneo) ou o polling de fallback.
 class PixPaymentPage extends StatefulWidget {
   final Order order;
 
@@ -31,8 +36,13 @@ class _PixPaymentPageState extends State<PixPaymentPage> {
   bool _isLoading = true;
   bool _wasCancelled = false;
 
+  /// O pedido ja saiu de `AGUARDANDO_PAGAMENTO`: nao ha mais o que observar, e
+  /// o desfecho (navegar ou avisar do cancelamento) so acontece uma vez.
+  bool _isSettled = false;
+
   Timer? _ticker;
   Timer? _poller;
+  EffectCleanup? _watchOrder;
   Duration _remaining = Duration.zero;
 
   @override
@@ -41,12 +51,14 @@ class _PixPaymentPageState extends State<PixPaymentPage> {
     _loadPayment();
     _startTicker();
     _startPolling();
+    _startWatching();
   }
 
   @override
   void dispose() {
     _ticker?.cancel();
     _poller?.cancel();
+    _watchOrder?.call();
     super.dispose();
   }
 
@@ -85,32 +97,49 @@ class _PixPaymentPageState extends State<PixPaymentPage> {
     });
   }
 
+  /// Fallback do WebSocket: os eventos sao best-effort, entao continuamos
+  /// recarregando o pedido de tempo em tempo.
   void _startPolling() {
     _poller = Timer.periodic(AppConfig.orderPollingInterval, (_) => _check());
   }
 
+  /// Observa o pedido no controller. Quem escreve ali pode ser o evento do
+  /// WebSocket ou o polling — os dois caem aqui.
+  void _startWatching() {
+    final orders = deps.ordersFullDependencies.orders;
+    _watchOrder = effect(() {
+      final order = orders.details.value[widget.order.id];
+      if (order != null) _handleUpdate(order);
+    });
+  }
+
   /// Recarrega o pedido para ver se o webhook ja aprovou (ou se o job de
-  /// expiracao cancelou).
-  Future<void> _check() async {
-    final updated = await deps.ordersFullDependencies.orders.refreshOrder(
-      widget.order.id,
-    );
-    if (!mounted || updated == null) return;
+  /// expiracao cancelou). O desfecho fica no observador acima.
+  Future<void> _check() =>
+      deps.ordersFullDependencies.orders.refreshOrder(widget.order.id);
 
-    if (updated.status == OrderStatus.cancelled) {
-      _poller?.cancel();
-      _ticker?.cancel();
-      setState(() => _wasCancelled = true);
-      return;
-    }
+  void _handleUpdate(Order order) {
+    if (_isSettled || order.status == OrderStatus.awaitingPayment) return;
 
-    if (updated.status != OrderStatus.awaitingPayment) {
-      _poller?.cancel();
-      _ticker?.cancel();
+    _isSettled = true;
+    _poller?.cancel();
+    _ticker?.cancel();
+
+    // Este callback roda durante a escrita do signal (e a primeira vez, ainda
+    // no initState): navegar ou dar setState aqui e cedo demais, entao o
+    // desfecho vai para depois do frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      if (order.status == OrderStatus.cancelled) {
+        setState(() => _wasCancelled = true);
+        return;
+      }
+
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => OrderConfirmedPage(order: updated)),
+        MaterialPageRoute(builder: (_) => OrderConfirmedPage(order: order)),
       );
-    }
+    });
   }
 
   void _goHome() {

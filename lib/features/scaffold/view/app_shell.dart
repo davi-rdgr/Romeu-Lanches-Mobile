@@ -64,12 +64,12 @@ class AppShell extends SignalWidget {
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
               selectedIcon: Icon(Icons.home),
-              label: 'Inicio',
+              label: 'Início',
             ),
             NavigationDestination(
               icon: Icon(Icons.restaurant_menu_outlined),
               selectedIcon: Icon(Icons.restaurant_menu),
-              label: 'Cardapio',
+              label: 'Cárdapio',
             ),
             NavigationDestination(
               icon: Icon(Icons.receipt_long_outlined),

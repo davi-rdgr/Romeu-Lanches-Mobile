@@ -29,10 +29,10 @@ class CardPanel extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             isDelivery
-                ? 'A maquininha vai com o entregador. Nao pedimos dados do seu '
-                      'cartao aqui.'
-                : 'Voce passa o cartao no balcao ao retirar o pedido. Nao '
-                      'pedimos dados do seu cartao aqui.',
+                ? 'A maquininha vai com o entregador. Não pedimos dados do seu '
+                      'cartão aqui.'
+                : 'Voce passa o cartão no balcao ao retirar o pedido. Não '
+                      'pedimos dados do seu cartão aqui.',
             style: GoogleFonts.plusJakartaSans(
               fontSize: 12,
               fontWeight: FontWeight.w500,
